@@ -1,2 +1,5 @@
 venv
 .vscode
+*.crt
+*.key
+__pycache__
