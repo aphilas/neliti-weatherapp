@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
+    />
+  </head>
+  <body>
+    <nav class="container-fluid">
+      <ul>
+        <li>WeatherApp</li>
+      </ul>
+    </nav>
+
+    <header>
+      <div class="container">
+        <hgroup>
+          <h2>Get weather in your location</h2>
+          <h3>Best weather buzzwords</h3>
+        </hgroup>
+
+        <div>
+          <button>Get weather in my city</button>
+
+          <p>
+            <small>This service requires location services to work</small>
+          </p>
+        </div>
+
+        {% if temp is defined %}
+          <article>
+            Temperature is {{ temp }}
+          </article>        
+        {% endif %}
+      </div>
+    </header>
+
+    <script>
+      button = document.querySelector("button");
+
+      async function getWeather(latitude, longitude) {
+        const data = await fetch("weather");
+      }
+
+      function getLocation() {
+        function success(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          button.textContent = "Get weather in my city";
+
+          p = new URLSearchParams()
+          p.set('lat', lat)
+          p.set('lon', lon)
+
+          window.location.search = p.toString()
+        }
+
+        function error() {
+          alert("Unable to retrieve your location");
+        }
+
+        if (!navigator.geolocation) {
+          alert("Geolocation is not supported by your browser");
+        } else {
+          button.textContent = "Locating...";
+
+          navigator.geolocation.getCurrentPosition(success, error);
+        }
+      }
+
+      button.addEventListener("click", getLocation);
+    </script>
+  </body>
+</html>
